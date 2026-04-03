@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Dashboard - Test Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Auth Screen -->
+        <section id="auth-screen" class="screen">
+            <div class="auth-card glass">
+                <header class="auth-header">
+                    <h1>Finance<span>App</span></h1>
+                    <p id="auth-toggle-text">Sign in to your account</p>
+                </header>
+                
+                <form id="auth-form">
+                    <div class="form-group" id="name-field" style="display: none;">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required placeholder="admin@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required placeholder="••••••••">
+                    </div>
+                    <div class="form-group" id="role-field" style="display: none;">
+                        <label for="role">Role</label>
+                        <select id="role">
+                            <option value="Analyst">Analyst</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="auth-submit-btn" class="btn primary">Login</button>
+                    <p class="toggle-p">
+                        <span id="auth-toggle-link" onclick="toggleAuthMode()">Don't have an account? Register</span>
+                    </p>
+                </form>
+                <div id="auth-error" class="error-msg"></div>
+            </div>
+        </section>
+
+        <!-- Main Screen -->
+        <section id="main-screen" class="screen hidden">
+            <nav class="sidebar glass">
+                <div class="sidebar-header">
+                    <h2>Finance<span>Pro</span></h2>
+                </div>
+                <div class="user-info">
+                    <div class="avatar" id="user-avatar">?</div>
+                    <div class="user-details">
+                        <span id="user-name">Loading...</span>
+                        <span id="user-role" class="badge">Role</span>
+                    </div>
+                </div>
+                <ul class="nav-links">
+                    <li onclick="showTab('dashboard')" class="active" id="nav-dashboard">Dashboard</li>
+                    <li onclick="showTab('records')" id="nav-records">Records</li>
+                    <li onclick="logout()" class="logout-btn">Logout</li>
+                </ul>
+            </nav>
+            
+            <main class="content">
+                <!-- Dashboard Tab -->
+                <div id="tab-dashboard" class="tab-content">
+                    <header class="content-header">
+                        <h1>Financial Overview</h1>
+                    </header>
+                    <div class="stats-grid">
+                        <div class="stat-card glass">
+                            <h3>Total Income</h3>
+                            <p class="stat-val" id="total-income">$0</p>
+                        </div>
+                        <div class="stat-card glass">
+                            <h3>Total Expenses</h3>
+                            <p class="stat-val" id="total-expenses">$0</p>
+                        </div>
+                        <div class="stat-card glass">
+                            <h3>Net Balance</h3>
+                            <p class="stat-val" id="net-balance">$0</p>
+                        </div>
+                    </div>
+                    <div class="charts-container">
+                        <div class="chart-card glass">
+                            <h3>Category Distribution</h3>
+                            <div id="category-list" class="mini-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Records Tab -->
+                <div id="tab-records" class="tab-content hidden">
+                    <header class="content-header">
+                        <h1>Records Management</h1>
+                        <button onclick="openModal()" class="btn primary admin-only">+ Add Record</button>
+                    </header>
+                    <div class="records-filters glass">
+                        <input type="text" id="filter-category" placeholder="Search category...">
+                        <select id="filter-type">
+                            <option value="">All Types</option>
+                            <option value="Income">Income</option>
+                            <option value="Expense">Expense</option>
+                        </select>
+                        <button onclick="fetchRecords()" class="btn secondary">Apply Filters</button>
+                    </div>
+                    <div class="table-container glass">
+                        <table id="records-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Category</th>
+                                    <th>Notes</th>
+                                    <th>Amount</th>
+                                    <th class="admin-only">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Records go here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </section>
+    </div>
+
+    <!-- Record Modal -->
+    <div id="record-modal" class="modal hidden">
+        <div class="modal-content glass">
+            <h2 id="modal-title">Add Record</h2>
+            <form id="record-form">
+                <input type="hidden" id="edit-id">
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="rec-type" required>
+                        <option value="Income">Income</option>
+                        <option value="Expense">Expense</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" id="rec-category" required placeholder="e.g. Salary, Rent, Food">
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" id="rec-amount" required step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="rec-date" required>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="rec-notes" placeholder="Optional notes..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModal()" class="btn secondary">Cancel</button>
+                    <button type="submit" class="btn primary" id="save-btn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
