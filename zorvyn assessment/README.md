@@ -69,7 +69,7 @@ The API is grouped logically under `/api`.
 - `DELETE /:id` - Delete record (Admin Auth required)
 
 ### Dashboard (`/api/dashboard`)
-- `GET /summary` - Get aggregated dashboard data. Provides calculations, top categories, monthly trends (Auth required for Viewer, Analyst, Admin)
+- `GET /analytics` - Get aggregated dashboard data. Provides calculations, top categories, monthly trends (Auth required for Viewer, Analyst, Admin)
 
 ## Author
 Prepared by Rashid Ali for Assessment Evaluation.

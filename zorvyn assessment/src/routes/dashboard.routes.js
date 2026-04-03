@@ -7,6 +7,6 @@ const router = express.Router();
 router.use(protect);
 
 //Viewers can view the dashboard 
-router.get('/summary', authorize('Viewer', 'Analyst', 'Admin'), getDashboardSummary);
+router.get('/analytics', authorize('Viewer', 'Analyst', 'Admin'), getDashboardSummary);
 
 export default router;
